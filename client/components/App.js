@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import ReactAudioPlayer from 'react-audio-player';
 import Textarea from 'react-textarea-autosize';
 import DownloadLink from "react-download-link";
+import WatsonSpeech from 'watson-speech';
 
 // Contants
 const STT_AUTHURL='/api/token';
@@ -92,8 +93,8 @@ class App extends Component {
     this.getToken().then(function(token) {
       console.log('Transcription started');
 
-      let recognizeFile = require('watson-speech/speech-to-text/recognize-file');
-      let stream = recognizeFile({
+      // let recognizeFile = require('watson-speech/speech-to-text/recognize-file');
+      let stream = WatsonSpeech.SpeechToText.recognizeFile({
         model: STT_MODEL,
         url: STT_URL,
         access_token: token,
@@ -173,7 +174,10 @@ class App extends Component {
           // Accepting file doesn't appear to work how I expect it to work... 
           // accept="audio/basic, audio/flac, audio/l16, audio/mp3, audio/mulaw, audio/ogg, audio/wav, audio/webm"
           onDrop={this.onDrop.bind(this)}>
-            <p> Drop your audio file here, or click to select the file to upload.</p>
+            <p> 
+              Drop your audio file here, or click to select the file to upload.
+              Supported audio types include: .wav, .mp3, .ogg, .opus, .flac, and .webm
+            </p>
         </Dropzone>
         <aside>
           <ul>{this.state.files.map(file => <li key={file.name}><button className='button-transcribe' onClick={this.onTranscribe.bind(this, file)}>Transcribe</button> {file.name} ({file.type})</li>)}</ul>
