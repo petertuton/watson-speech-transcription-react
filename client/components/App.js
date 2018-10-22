@@ -5,8 +5,8 @@ import Textarea from 'react-textarea-autosize';
 import DownloadLink from "react-download-link";
 
 // Contants
-// TODO: Allow these values to be entered into the UI?
 const STT_AUTHURL='/api/token';
+// TODO: Allow these values to be entered into the UI, with defaults? 
 const STT_URL='https://gateway-syd.watsonplatform.net/speech-to-text/api';
 const STT_MODEL='en-US_NarrowbandModel';
 const STT_LANGUAGE_CUSTOMISATION_ID='af031a6a-9be3-4ef6-9864-1b7ea0c23aea';
@@ -98,8 +98,8 @@ class App extends Component {
         url: STT_URL,
         access_token: token,
         smart_formatting: true,
-        // customization_id: STT_LANGUAGE_CUSTOMISATION_ID,
-        // acoustic_customization_id: STT_ACOUSTIC_CUSTOMISATION_ID, 
+        customization_id: STT_LANGUAGE_CUSTOMISATION_ID,
+        acoustic_customization_id: STT_ACOUSTIC_CUSTOMISATION_ID, 
         file: file.preview,
         play: false,
         format: true,
