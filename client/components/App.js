@@ -99,7 +99,7 @@ class App extends Component {
         url: STT_URL,
         access_token: token,
         smart_formatting: true,
-        customization_id: STT_LANGUAGE_CUSTOMISATION_ID,
+        language_customization_id: STT_LANGUAGE_CUSTOMISATION_ID,
         acoustic_customization_id: STT_ACOUSTIC_CUSTOMISATION_ID, 
         file: file.preview,
         play: false,
