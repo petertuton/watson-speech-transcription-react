@@ -1,9 +1,10 @@
 applications:
-- name: pt-recoveries-watson-speech-transcription
+- name: recoveries-watson-speech-transcription
   buildpack: sdk-for-nodejs
   path: .
   command: npm start
-  memory: 256M
+  memory: 1024M
   env:
    NODE_ENV: production
+   NODE_MODULES_CACHE: false
    OPTIMIZE_MEMORY: true
