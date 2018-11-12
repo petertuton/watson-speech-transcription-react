@@ -1,0 +1,585 @@
+{
+	"info": {
+		"_postman_id": "9534dc22-dfab-4428-8292-618701084374",
+		"name": "Watson Speach",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Language customization - list",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - list corpora",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/corpora",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"corpora"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - add/update corpus",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/corpora/corpus?allow_overwrite=true",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"corpora",
+						"corpus"
+					],
+					"query": [
+						{
+							"key": "allow_overwrite",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - delete corpus",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/corpora/corpora1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"corpora",
+						"corpora1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - list words",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/words",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"words"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - delete words",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/words",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"words"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - add words",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"words\": [\n        {\n            \"word\": \"Coles\",\n            \"display_as\": \"Coles\",\n            \"sounds_like\": [\n                \"coals\"\n            ]\n        },\n        {\n            \"word\": \"Woolworths\",\n            \"display_as\": \"Woolworths\",\n            \"sounds_like\": [\n                \"wool worths\",\n                \"woolies\"\n            ]\n        },\n        {\n            \"word\": \"AAMI-Insurance\",\n            \"display_as\": \"AAMI Insurance\",\n            \"sounds_like\": [\n                \"Amy insurance\",\n                \"any insurance\",\n                \"double A. M. I. insurance\"\n            ]\n        },\n        {\n            \"word\": \"NRMA\",\n            \"display_as\": \"NRMA\",\n            \"sounds_like\": [\n                \"N. R. M. A\"\n            ]\n        }\n\t]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/words",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"words"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - train",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"maaaaate\",\n\t\"categories\": \"aussie\",\n\t\"content\": \"g'day mate!\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/train",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"train"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - reset",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"maaaaate\",\n\t\"categories\": \"aussie\",\n\t\"content\": \"g'day mate!\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/reset",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Language customization - upgrade",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/customizations/{{language_customization_id}}/upgrade_model",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"customizations",
+						"{{language_customization_id}}",
+						"upgrade_model"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Suncorp-acoustic-model\",\n\t\"base_model_name\": \"en-US_NarrowbandModel\", \n\t\"description\": \"Suncorp acoustic model\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/acoustic_customizations/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"acoustic_customizations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - list",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/acoustic_customizations/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"acoustic_customizations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/acoustic_customizations/{{acoustic_customization_id}}/audio",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"acoustic_customizations",
+						"{{acoustic_customization_id}}",
+						"audio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - add audio wav",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/zip"
+					},
+					{
+						"key": "Contained-Content-Type",
+						"value": "audio/wav",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "{{url}}/v1/acoustic_customizations/{{acoustic_customization_id}}/audio/wav",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"acoustic_customizations",
+						"{{acoustic_customization_id}}",
+						"audio",
+						"wav"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - add audio mp3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/zip"
+					},
+					{
+						"key": "Contained-Content-Type",
+						"value": "audio/mp3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "{{url}}/v1/acoustic_customizations/{{acoustic_customization_id}}/audio/mp3",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"acoustic_customizations",
+						"{{acoustic_customization_id}}",
+						"audio",
+						"mp3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - train",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"maaaaate\",\n\t\"categories\": \"aussie\",\n\t\"content\": \"g'day mate!\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/acoustic_customizations/{{acoustic_customization_id}}/train?custom_language_model_id={{language_customization_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"acoustic_customizations",
+						"{{acoustic_customization_id}}",
+						"train"
+					],
+					"query": [
+						{
+							"key": "custom_language_model_id",
+							"value": "{{language_customization_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic customization - reset",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"maaaaate\",\n\t\"categories\": \"aussie\",\n\t\"content\": \"g'day mate!\"\n}"
+				},
+				"url": {
+					"raw": "https://gateway-syd.watsonplatform.net/speech-to-text/api/v1/acoustic_customizations/082ad887-826c-49c8-a19c-a30110f4d43a/reset",
+					"protocol": "https",
+					"host": [
+						"gateway-syd",
+						"watsonplatform",
+						"net"
+					],
+					"path": [
+						"speech-to-text",
+						"api",
+						"v1",
+						"acoustic_customizations",
+						"082ad887-826c-49c8-a19c-a30110f4d43a",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "szuLO5ESF8MzYzg6hIoIQvIJ0Rrb4rX8vRhWlv86668W",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "apikey",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c4df5473-1d3c-43b0-adbc-3eb57108b92c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "28e799eb-385c-49af-af3b-dafeb9ab068d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "9f2ac951-0e29-483a-87fa-caf2e079d5ab",
+			"key": "language_customization_id",
+			"value": "af031a6a-9be3-4ef6-9864-1b7ea0c23aea",
+			"type": "string"
+		},
+		{
+			"id": "883043ad-d240-4094-b6cd-f5fb46a46bd3",
+			"key": "acoustic_customization_id",
+			"value": "082ad887-826c-49c8-a19c-a30110f4d43a",
+			"type": "string"
+		},
+		{
+			"id": "a680f398-f1a1-45b2-a23a-2a62e55bf003",
+			"key": "url",
+			"value": "https://gateway-syd.watsonplatform.net/speech-to-text/api",
+			"type": "string"
+		},
+		{
+			"id": "23ba5cea-e6c4-4197-a5bd-3df22c0bad34",
+			"key": "model",
+			"value": "en-US_NarrowbandModel",
+			"type": "string"
+		}
+	]
+}
