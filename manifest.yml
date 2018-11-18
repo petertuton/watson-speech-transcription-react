@@ -1,5 +1,5 @@
 applications:
-- name: recoveries-watson-speech-transcription
+- name: watson-speech-transcription
   buildpack: sdk-for-nodejs
   path: .
   command: npm start
