@@ -6,7 +6,6 @@ import DownloadLink from "react-download-link";
 import FileRecognition from './file-recognition';
 
 // Contants
-const API_URL='/api/url';
 const API_CONFIG='/api/config';
 const API_TOKEN='/api/token';
 const INTERVAL_TOKEN=3600000;     // 1 hour
@@ -32,7 +31,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Get the stt config used by the server and set the state's configuration
+    // Get the config used by the server and set the state's configuration accordingly
     this._getConfig().then((config) => {
       this.setState({ 
         url: config.url,
@@ -45,10 +44,9 @@ class App extends Component {
     // Get an authentication token from the server
     this._getToken().then((token) => {
         this.setState({ token });
+        // Set the token's refresh interval
+        this.intervalToken = setInterval(this._getToken, INTERVAL_TOKEN);
     });
-
-    // Set the token's refresh interval
-    this.intervalToken = setInterval(this._getToken, INTERVAL_TOKEN);
   }
   
   componentWillUnmount() {
