@@ -127,17 +127,17 @@ class App extends Component {
     // Perform the action relative to thestatus of the selected file/job
     switch (fileRecognition.status) {
       
-      // Job not started - create a new job
+      // Transcription not started
       case fileRecognition.STATUS_NOTSTARTED:
-        // Websocket-based transcription
+        // Start transcribing
         fileRecognition.transcribe();
         break;
 
-      // Still processing...
+      // Transcription still processing...
       case fileRecognition.STATUS_PROCESSING:
         break;
 
-      // Job completed
+      // Transcription completed
       case fileRecognition.STATUS_COMPLETED:
         break;
       
@@ -146,7 +146,7 @@ class App extends Component {
         break;
     }
 
-    // Update the UI with the selected job
+    // Update the UI with the selected file
     this.setState({
       selectedJob: fileRecognition
     });
@@ -175,8 +175,8 @@ class App extends Component {
   // render
   // 
   render() {
-    let selectedJob = this.state.selectedJob;
-    let isSelectedJobComplete = selectedJob && selectedJob.isComplete() ? true : false;
+    const selectedJob = this.state.selectedJob;
+    const isSelectedJobComplete = selectedJob && selectedJob.isComplete() ? true : false;
 
     return (
       <div>
@@ -204,7 +204,6 @@ class App extends Component {
         />
         <TextField 
           id='transcription'
-          // label="Transcription"
           className='transcription'
           variant='outlined'
           multiline
