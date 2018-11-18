@@ -107,7 +107,8 @@ class App extends Component {
     // Set the state to include the new array, clear the selected job and transcription
     this.setState(function(prevState,props) {
       // Stop any previous jobs that were processing
-      prevState.fileRecognitions.forEach((job) => job.stop());
+      // prevState.fileRecognitions.forEach((job) => job.stop());
+      prevState.fileRecognitions.filter((job) => job.isProcessing()).forEach((job) => job.stop());
       return {
         fileRecognitions,
         selectedJob: null,
