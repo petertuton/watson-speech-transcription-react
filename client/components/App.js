@@ -3,51 +3,86 @@ import Dropzone from 'react-dropzone';
 import ReactAudioPlayer from 'react-audio-player';
 import TextField from '@material-ui/core/TextField';
 import DownloadLink from "react-download-link";
-import RecognitionJob from '../lib/recognition-job';
+import FileRecognition from './file-recognition';
 
 // Contants
-// TODO: Pass these as parameters via the UI
-const STT_URL='https://gateway-syd.watsonplatform.net/speech-to-text/api';
-const STT_MODEL='en-US_NarrowbandModel';
-const STT_LANGUAGE_CUSTOMISATION_ID='601ff8ed-f9b9-4d21-b41b-e1e915781e99';
-const STT_ACOUSTIC_CUSTOMISATION_ID='83739a0b-5b4a-4df8-b360-bba5ceb8af8a';
-const CHECKSTATUS_INTERVAL=5000;
+const API_URL='/api/url';
+const API_CONFIG='/api/config';
+const API_TOKEN='/api/token';
+const INTERVAL_TOKEN=3600000;     // 1 hour
+const INTERVAL_FORCEUPDATE=5000;  // 5 seconds
+
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     // Initialise the state
     this.state = { 
-      url: STT_URL,
-      model: STT_MODEL,
-      language_customization_id: STT_LANGUAGE_CUSTOMISATION_ID,
-      acoustic_customization_id: STT_ACOUSTIC_CUSTOMISATION_ID,
-      recognitionJobs: [],
+      url: '',
+      model: '',
+      language_customization_id: '',
+      acoustic_customization_id: '',
+      token: null,
+      FileRecognitions: [],
       selectedJob: null,
       transcription: ''
     };
   }
 
-  // componentDidMount() {
-  // }
+  componentDidMount() {
+    // Get the stt config used by the server and set the state's configuration
+    this._getConfig().then((config) => {
+      this.setState({ 
+        url: config.url,
+        model: config.model,
+        language_customization_id: config.language_customization_id,
+        acoustic_customization_id: config.acoustic_customization_id
+      });
+    });
+
+    // Get an authentication token from the server
+    this._getToken().then((token) => {
+        this.setState({ token });
+    });
+
+    // Set the token's refresh interval
+    this.intervalToken = setInterval(this._getToken, INTERVAL_TOKEN);
+  }
   
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    clearInterval(this.intervalToken);
+    clearInterval(this.intervalForceUpdate);
   }
 
   //////////////////
   // 
-  // checkJobs - Calls STT via the server in async mode to check all job statuses
-  // 
-  checkJobs() {
-    // Check any recognition jobs that are still processing 
-    // TODO: Removing async calls, for now... 
-    // this.state.recognitionJobs.filter(recognitionJob => recognitionJob.isProcessing()).map(processingJob => {
-    //   processingJob.checkJob();
-    // });
+  // _getConfig - Requests the configuration used by the server-side component
+  //
+  _getConfig() {
+    console.log("Requesting server configuration");
+    return fetch(API_CONFIG)
+      .then(response => response.json())
+      .catch(error => console.error(error));
+  }
 
+  //////////////////
+  // 
+  // _getToken - Requests an authentication token from the server-side component
+  //
+  _getToken() {
+    console.log("Requesting authentication token");
+    return fetch(API_TOKEN)
+      .then(response => response.text())
+      .catch(error => console.error(error));
+  }
+
+  //////////////////
+  // 
+  // _checkJobs - Forces a render to ensure any transcriptions are picked-up
+  // 
+  _checkJobs = () => {
     // Force a rerender to ensure any updated jobs are rendered
     this.forceUpdate();
   }
@@ -56,48 +91,51 @@ class App extends Component {
   // 
   // onDrop - called when files are dropped into <Dropzone>
   // 
-  onDrop(files) {
+  onDrop = (files) => {
     // Create a new recognition job array containing each file in the dropzone
-    let recognitionJobs = [];
-    files.forEach((file) => recognitionJobs.push(new RecognitionJob(file, this.state.url, this.state.model, this.state.language_customization_id, this.state.acoustic_customization_id)));
+    let FileRecognitions = [];
+    files.forEach((file) => FileRecognitions.push(new FileRecognition(
+                                                      file, 
+                                                      this.state.token,
+                                                      this.state.url, 
+                                                      this.state.model, 
+                                                      this.state.language_customization_id, 
+                                                      this.state.acoustic_customization_id
+                                                    )));
 
-    // Do we need to release any memory used by the previous recognitionJobs files object? 
+    // Do we need to release any memory used by the previous FileRecognitions files object? 
 
     // Set the state to include the new array, clear the selected job and transcription
     this.setState({
-      recognitionJobs,
+      FileRecognitions,
       selectedJob: null,
       transcription: ''
     });
 
     // Start the interval to refresh the recognition job status's
-    // TODO: when not running on localhost, change this to a websocket to collect updates from the server rather than periodic checks
-    this.intervalId = setInterval(this.checkJobs.bind(this), CHECKSTATUS_INTERVAL);
+    this.intervalForceUpdate = setInterval(this._checkJobs, INTERVAL_FORCEUPDATE);
   }
 
   //////////////////
   // 
   // onSelect - called when the transcribe/processing/completed button is clicked
   // 
-  onSelect(recognitionJob) {
+  onSelect = (FileRecognition) => {
     // Perform the action relative to thestatus of the selected file/job
-    switch (recognitionJob.status) {
+    switch (FileRecognition.status) {
       
       // Job not started - create a new job
-      case recognitionJob.STATUS_NOTSTARTED:
-        // TODO: process the file using either async or websocket, based on the size limitations and/or an option
-        // Async-based transcription - doesn't return results
-        // recognitionJob.createJob();
+      case FileRecognition.STATUS_NOTSTARTED:
         // Websocket-based transcription
-        recognitionJob.transcribe();
+        FileRecognition.transcribe();
         break;
 
       // Still processing...
-      case recognitionJob.STATUS_PROCESSING:
+      case FileRecognition.STATUS_PROCESSING:
         break;
 
       // Job completed
-      case recognitionJob.STATUS_COMPLETED:
+      case FileRecognition.STATUS_COMPLETED:
         break;
       
       default:
@@ -107,7 +145,7 @@ class App extends Component {
 
     // Update the UI with the selected job
     this.setState({
-      selectedJob: recognitionJob
+      selectedJob: FileRecognition
     });
   }
 
@@ -115,7 +153,7 @@ class App extends Component {
   // 
   // onTranscriptionChange - called when the transcription text is editted by the user
   // 
-  onTranscriptionChange(event) {
+  onTranscriptionChange = (event) => {
     let transcription = event.target.value;
     let selectedJob = this.state.selectedJob;
     
@@ -146,14 +184,14 @@ class App extends Component {
           className='dropzone'
           // Accepting file doesn't appear to work how I expect it to work... 
           // accept="audio/basic, audio/flac, audio/l16, audio/mp3, audio/mulaw, audio/ogg, audio/wav, audio/webm"
-          onDrop={this.onDrop.bind(this)}>
+          onDrop={this.onDrop}>
             <p> 
               Drop your audio file here, or click to select the file to upload.
               Supported audio types include: .wav, .mp3, .ogg, .opus, .flac, and .webm
             </p>
         </Dropzone>
         <aside>
-          <ul>{this.state.recognitionJobs.map((job,index) => <li key={job.file.name}><button className='button-select' onClick={this.onSelect.bind(this, job)}>{job.status}</button> {job.file.name} ({job.file.type})</li>)}
+          <ul>{this.state.FileRecognitions.map((job,index) => <li key={job.file.name}><button className='button-select' onClick={this.onSelect.bind(this, job)}>{job.status}</button> {job.file.name} ({job.file.type})</li>)}
           </ul>
         </aside>
         <ReactAudioPlayer 
@@ -172,7 +210,7 @@ class App extends Component {
           rowsMax={20} 
           value={selectedJob ? selectedJob.transcription: ''} 
           disabled={!isSelectedJobComplete}
-          onChange={this.onTranscriptionChange.bind(this)} 
+          onChange={this.onTranscriptionChange} 
         />
         <DownloadLink
           id='button-save'
