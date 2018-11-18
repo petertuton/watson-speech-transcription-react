@@ -1,8 +1,5 @@
 import WatsonSpeech from '../lib/watson-speech';
 
-// Contants
-const STT_AUTHURL='/api/token';
-
 export default class FileRecognition {
   
   constructor(file, token, url, model, language_customization_id, acoustic_customization_id) {
@@ -33,7 +30,7 @@ export default class FileRecognition {
   
   //////////////////
   // 
-  // transcribe - Calls STT via WebSockets
+  // transcribe - Calls Watson STT via WebSockets
   // 
   transcribe() {
     // Set the status to processing
