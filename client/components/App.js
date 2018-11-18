@@ -33,6 +33,7 @@ class App extends Component {
   componentDidMount() {
     // Get the config used by the server and set the state's configuration accordingly
     this._getConfig().then((config) => {
+      console.log("Server configuration:",JSON.stringify(config));
       this.setState({ 
         url: config.url,
         model: config.model,
@@ -104,10 +105,14 @@ class App extends Component {
     // Do we need to release any memory used by the previous FileRecognitions files object? 
 
     // Set the state to include the new array, clear the selected job and transcription
-    this.setState({
-      FileRecognitions,
-      selectedJob: null,
-      transcription: ''
+    this.setState(function(prevState,props) {
+      // Stop any previous jobs that were processing
+      prevState.FileRecognitions.forEach((job) => job.stop());
+      return {
+        FileRecognitions,
+        selectedJob: null,
+        transcription: ''
+      }
     });
 
     // Start the interval to refresh the recognition job status's

@@ -10,19 +10,17 @@ export default class FileRecognition {
     this.STATUS_PROCESSING = 'processing';
     this.STATUS_COMPLETED = 'completed';
 
+    this.status = this.STATUS_NOTSTARTED;
+    this.transcription = 'Processing... results may take a few moments to return';
+
     this.file=file;
-    this.url=url;
     this.token=token;
+    this.url=url;
     this.model=model;
     this.language_customization_id=language_customization_id;
     this.acoustic_customization_id=acoustic_customization_id;
-    
-    this.id = null;
-    this.created = '';
-    this.status = this.STATUS_NOTSTARTED;
-    this.updated = '';
-    this.results = '';
-    this.transcription = 'Processing... results may take a few moments to return';
+
+    this.stream = null;
   }  
   
   isProcessing() {
@@ -60,38 +58,50 @@ export default class FileRecognition {
 
         'X-Watson-Learning-Opt-Out': true
       });
-  
-      stream.on('data', function(data) {
-        let lines = data.results.map(function(result) {
-          return 'Speaker ' + result.speaker + ': ' + result.alternatives[0].transcript;
-        });
-        // TODO: Replace 'Speaker x' with an actual name, provided by the user via the UI
-        let transcription = lines.join('\n');
 
-        // Update the selected job's running transcription
-        this.transcription = transcription;
-
-      }.bind(this));
-
-      stream.on('error', function(error) {
-        console.error(error);
-        this.transcription = 'Transcription error: ' + error;
-        this.status = this.STATUS_COMPLETED;
-      }.bind(this));
+      stream.on('data', this._onStreamData);
+      stream.on('error', this._onStreamError);
+      stream.on('stop', this._onStreamStop);
+      stream.on('finish', this._onStreamFinish);
   
-      stream.on('stop', function() {
-        console.log('Transcription stopped:',this.file.name);
-      }.bind(this));
-  
-      stream.on('finish', function() {
-        console.log('Transcription finished:',this.file.name);
-        this.status = this.STATUS_COMPLETED;
-      }.bind(this));
+      this.stream = stream;
     }
     catch (error) {
       console.error(error);
       this.status = this.STATUS_COMPLETED;
       this.transcription = 'Transcription error: ' + error;
     }
+  }
+
+  stop() {
+    if (this.stream) {
+      console.log("Stopping:",this.file.name);
+      this.stream.stop();
+    }
+  }
+
+  _onStreamData = (data) => {
+    let lines = data.results.map(function(result) {
+      return 'Speaker ' + result.speaker + ': ' + result.alternatives[0].transcript;
+    });
+    // TODO: Replace 'Speaker x' with an actual name, provided by the user via the UI
+    let transcription = lines.join('\n');
+
+    // Update the selected job's running transcription
+    this.transcription = transcription;
+  }
+
+  _onStreamError = (error) => {
+    console.error(error);
+    this.transcription = 'Transcription error: ' + error;
+    this.status = this.STATUS_COMPLETED;
+  }
+
+  _onStreamStop = () => {
+    console.log('Transcription stopped:',this.file.name);
+  }
+
+  _onStreamFinish = () => {
+    console.log('Transcription finished:',this.file.name);
   }
 }
