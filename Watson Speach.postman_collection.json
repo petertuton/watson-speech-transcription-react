@@ -306,7 +306,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Suncorp-acoustic-model\",\n\t\"base_model_name\": \"en-US_NarrowbandModel\", \n\t\"description\": \"Suncorp acoustic model\"\n}"
+					"raw": "{\n\t\"name\": \"Custom-acoustic-model\",\n\t\"base_model_name\": \"en-US_NarrowbandModel\", \n\t\"description\": \"Custom acoustic model\"\n}"
 				},
 				"url": {
 					"raw": "{{url}}/v1/acoustic_customizations/",
