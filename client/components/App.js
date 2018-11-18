@@ -24,7 +24,7 @@ class App extends Component {
       language_customization_id: '',
       acoustic_customization_id: '',
       token: null,
-      FileRecognitions: [],
+      fileRecognitions: [],
       selectedJob: null,
       transcription: ''
     };
@@ -92,8 +92,8 @@ class App extends Component {
   // 
   onDrop = (files) => {
     // Create a new recognition job array containing each file in the dropzone
-    let FileRecognitions = [];
-    files.forEach((file) => FileRecognitions.push(new FileRecognition(
+    let fileRecognitions = [];
+    files.forEach((file) => fileRecognitions.push(new FileRecognition(
                                                       file, 
                                                       this.state.token,
                                                       this.state.url, 
@@ -102,14 +102,14 @@ class App extends Component {
                                                       this.state.acoustic_customization_id
                                                     )));
 
-    // Do we need to release any memory used by the previous FileRecognitions files object? 
+    // Do we need to release any memory used by the previous fileRecognitions files object? 
 
     // Set the state to include the new array, clear the selected job and transcription
     this.setState(function(prevState,props) {
       // Stop any previous jobs that were processing
-      prevState.FileRecognitions.forEach((job) => job.stop());
+      prevState.fileRecognitions.forEach((job) => job.stop());
       return {
-        FileRecognitions,
+        fileRecognitions,
         selectedJob: null,
         transcription: ''
       }
@@ -123,22 +123,22 @@ class App extends Component {
   // 
   // onSelect - called when the transcribe/processing/completed button is clicked
   // 
-  onSelect = (FileRecognition) => {
+  onSelect = (fileRecognition) => {
     // Perform the action relative to thestatus of the selected file/job
-    switch (FileRecognition.status) {
+    switch (fileRecognition.status) {
       
       // Job not started - create a new job
-      case FileRecognition.STATUS_NOTSTARTED:
+      case fileRecognition.STATUS_NOTSTARTED:
         // Websocket-based transcription
-        FileRecognition.transcribe();
+        fileRecognition.transcribe();
         break;
 
       // Still processing...
-      case FileRecognition.STATUS_PROCESSING:
+      case fileRecognition.STATUS_PROCESSING:
         break;
 
       // Job completed
-      case FileRecognition.STATUS_COMPLETED:
+      case fileRecognition.STATUS_COMPLETED:
         break;
       
       default:
@@ -148,7 +148,7 @@ class App extends Component {
 
     // Update the UI with the selected job
     this.setState({
-      selectedJob: FileRecognition
+      selectedJob: fileRecognition
     });
   }
 
@@ -194,7 +194,7 @@ class App extends Component {
             </p>
         </Dropzone>
         <aside>
-          <ul>{this.state.FileRecognitions.map((job,index) => <li key={job.file.name}><button className='button-select' onClick={this.onSelect.bind(this, job)}>{job.status}</button> {job.file.name} ({job.file.type})</li>)}
+          <ul>{this.state.fileRecognitions.map((job,index) => <li key={job.file.name}><button className='button-select' onClick={this.onSelect.bind(this, job)}>{job.status}</button> {job.file.name} ({job.file.type})</li>)}
           </ul>
         </aside>
         <ReactAudioPlayer 
