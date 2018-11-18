@@ -96,9 +96,11 @@ export default class FileRecognition {
 
   _onStreamStop = () => {
     console.log('Transcription stopped:',this.file.name);
+    this.status = this.STATUS_COMPLETED;
   }
 
   _onStreamFinish = () => {
     console.log('Transcription finished:',this.file.name);
+    this.status = this.STATUS_COMPLETED;
   }
 }
